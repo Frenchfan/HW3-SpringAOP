@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  postgres4:
+    image: 'postgres:16.0'
+    container_name: 'postgres4'
+    environment:
+      - 'POSTGRES_DB=hw3'
+      - 'POSTGRES_PASSWORD=hw26032024'
+      - 'POSTGRES_USER=sumkin'
+    ports:
+      - '5447:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 'app'
+    ports:
+      - '8089:8089'
+    depends_on:
+      - 'postgres4'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres4:5432/hw3
+      SPRING_DATASOURCE_USERNAME: sumkin
+      SPRING_DATASOURCE_PASSWORD: hw26032024
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
+      SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: hw1
+
+networks:
+  hw3:
+    driver: bridge
